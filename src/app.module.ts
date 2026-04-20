@@ -33,26 +33,14 @@ import { AlbumBandModule } from './albumband/albumband.module';
 import { AlbumMusicianModule } from './albummusician/albummusician.module';
 
 @Module({
-  imports: [  
+  imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: 5432,
-      username: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASS || 'postgres',
-      database: process.env.DB_NAME || 'vinyls',
-      entities: [Album, CollectorAlbum, Band, Collector, Comment, Musician, Performer, PerformerPrize, Prize, Track,],
-      dropSchema: false,
+      url: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+      entities: [Album, CollectorAlbum, Band, Collector, Comment, Musician, Performer, PerformerPrize, Prize, Track],
       synchronize: true,
       keepConnectionAlive: true,
-      migrations: [__dirname + '/migration/**/*{.ts,.js}'],
-      migrationsRun: true,
-      extra: process.env.USE_SSL === 'true' ? {
-        ssl: {
-          rejectUnauthorized: false,
-          sslmode: 'require'
-        }
-      } : undefined
     }),
     RecordLabelModule,
     PrizeModule,
@@ -72,6 +60,7 @@ import { AlbumMusicianModule } from './albummusician/albummusician.module';
     BandAlbumModule,
     CollectorPerformerModule,
     AlbumBandModule,
-    AlbumMusicianModule],
+    AlbumMusicianModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
